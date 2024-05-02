@@ -2,11 +2,99 @@ import XCTest
 @testable import swift_sdk
 
 final class swift_sdkTests: XCTestCase {
-    func testExample() throws {
-        // XCTest Documentation
-        // https://developer.apple.com/documentation/xctest
+    
+    var client: GlideClient!
 
-        // Defining Test Cases and Test Methods
-        // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
+    override func setUpWithError() throws {
+        super.setUp()
+        client = GlideClient()
+    }
+
+    override func tearDownWithError() throws {
+        client = nil
+        super.tearDown()
+    }
+
+    func testAuthenticateWithOAuth2() async throws {
+        // Given
+        let authConfig = AuthConfig(scopes: ["openid"], loginHint: nil, provider: .threeLeggedOAuth2)
+
+        // When
+        let response = try await client.authenticate(authConfig: authConfig)
+
+        // Then
+        XCTAssertNotNil(response.redirectUrl, "Redirect URL should not be nil.")
+    }
+
+    func testAuthenticateWithCiba() async throws {
+        // Given
+        let phoneNumber = "1234567890"
+        let authConfig = AuthConfig(scopes: ["openid", "dpv:FraudPreventionAndDetection:sim-swap"], loginHint: "tel:\(phoneNumber)", provider: .ciba)
+
+        // When
+        let response = try await client.authenticate(authConfig: authConfig)
+
+        // Then
+        XCTAssertNotNil(response.session, "Session should not be nil.")
+    }
+
+    func testVerifyLocationSuccessfully() async throws {
+        // Given
+        let location = LocationBody(latitude: 37.7749, longitude: -122.4194, radius: 100, deviceId: "testDevice", deviceIdType: .phoneNumber, maxAge: 1000)
+
+        // When
+        let isValid = try await client.verifyLocation(latitude: location.latitude, longitude: location.longitude, deviceId: location.deviceId, radius: location.radius, deviceIdType: location.deviceIdType, maxAge: location.maxAge)
+
+        // Then
+        XCTAssertTrue(isValid, "Location verification should be successful.")
+    }
+
+    func testCheckSimSwap() async throws {
+        // Given
+        let phoneNumber = "1234567890"
+        let maxAge = 0
+
+        // When
+        let isSwapped = try await client.checkSimSwap(phoneNumber: phoneNumber, maxAge: maxAge)
+
+        // Then
+        XCTAssertTrue(isSwapped, "Sim swap check should return true.")
+    }
+
+    func testMagicAuthWithValidCredentials() async throws {
+        // Given
+        let dto = StartVerificationDto(phoneNumber: "1234567890", email: "test@example.com", fallbackChannel: .email)
+
+        // When
+        let response = try await client.magicAuth(startVerificationDto: dto)
+
+        // Then
+        XCTAssertNotNil(response, "Response should not be nil.")
+        XCTAssertEqual(response.type, VerificationType.magic.rawValue, "Response type should be MAGIC.")
+    }
+
+    func testMagicAuthWithInvalidCredentials() async throws {
+        // Given
+        let dto = StartVerificationDto(phoneNumber: "invalid", email: "invalid@example.com", fallbackChannel: .email)
+
+        // When
+        do {
+            let _ = try await client.magicAuth(startVerificationDto: dto)
+            XCTFail("Should have thrown an error for invalid credentials")
+        } catch {
+            // Then
+            XCTAssertTrue(error is HTTPResponseError, "Should throw an HTTPResponseError due to invalid credentials.")
+        }
+    }
+
+    func testVerifyTokenSuccessfully() async throws {
+        // Given
+        let dto = CheckCodeDto(phoneNumber: "1234567890", email: "test@example.com", code: "1234")
+
+        // When
+        let result = try await client.verifyToken(checkCodeDto: dto)
+
+        // Then
+        XCTAssertTrue(result, "Token verification should return true.")
     }
 }
