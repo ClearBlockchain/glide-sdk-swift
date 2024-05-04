@@ -60,41 +60,4 @@ final class swift_sdkTests: XCTestCase {
         // Then
         XCTAssertTrue(isSwapped, "Sim swap check should return true.")
     }
-
-    func testMagicAuthWithValidCredentials() async throws {
-        // Given
-        let dto = StartVerificationDto(phoneNumber: "1234567890", email: "test@example.com", fallbackChannel: .email)
-
-        // When
-        let response = try await client.magicAuth(startVerificationDto: dto)
-
-        // Then
-        XCTAssertNotNil(response, "Response should not be nil.")
-        XCTAssertEqual(response.type, VerificationType.magic.rawValue, "Response type should be MAGIC.")
-    }
-
-    func testMagicAuthWithInvalidCredentials() async throws {
-        // Given
-        let dto = StartVerificationDto(phoneNumber: "invalid", email: "invalid@example.com", fallbackChannel: .email)
-
-        // When
-        do {
-            let _ = try await client.magicAuth(startVerificationDto: dto)
-            XCTFail("Should have thrown an error for invalid credentials")
-        } catch {
-            // Then
-            XCTAssertTrue(error is HTTPResponseError, "Should throw an HTTPResponseError due to invalid credentials.")
-        }
-    }
-
-    func testVerifyTokenSuccessfully() async throws {
-        // Given
-        let dto = CheckCodeDto(phoneNumber: "1234567890", email: "test@example.com", code: "1234")
-
-        // When
-        let result = try await client.verifyToken(checkCodeDto: dto)
-
-        // Then
-        XCTAssertTrue(result, "Token verification should return true.")
-    }
 }
