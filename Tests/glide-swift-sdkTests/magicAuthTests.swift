@@ -1,9 +1,9 @@
 import XCTest
-@testable import swift_sdk
+@testable import glide_sdk_swift
 
-final class swift_sdkTests: XCTestCase {
+final class magicAuth_sdkTests: XCTestCase {
     
-    var magicAuth = MagicAuth()
+    var magicAuth: MagicAuth? = nil
 
     override func setUpWithError() throws {
         super.setUp()
@@ -20,11 +20,11 @@ final class swift_sdkTests: XCTestCase {
         let dto = StartVerificationDto(phoneNumber: "+41796580164", email: nil, fallbackChannel: .sms)
 
         // When
-        let response = try await magicAuth.authenticate(startVerificationDto: dto)
+        let response = try await magicAuth?.authenticate(startVerificationDto: dto)
 
         // Then
-        XCTAssertEqual(response.type, "MAGIC", "Should return MAGIC verification type.")
-        XCTAssertTrue(response.verified, "Should return true for verified.")
+        XCTAssertEqual(response?.type, VerificationType.magic, "Should return MAGIC verification type.")
+        XCTAssertTrue(response!.verified!, "Should return true for verified.")
     }
 
     func testMagicAuthWithFallback() async throws {
@@ -32,10 +32,10 @@ final class swift_sdkTests: XCTestCase {
         let dto = StartVerificationDto(phoneNumber: "+41796580164", email: nil, fallbackChannel: .sms)
 
         // When
-        let response = try await magicAuth.authenticate(startVerificationDto: dto)
+        let response = try await magicAuth?.authenticate(startVerificationDto: dto)
 
         // Then
-        XCTAssertEqual(response.type, "SMS", "Should return SMS verification type.")
+        XCTAssertEqual(response?.type, VerificationType.sms, "Should return SMS verification type.")
     }
 
     func testVerifyTokenSuccessfully() async throws {
@@ -43,9 +43,9 @@ final class swift_sdkTests: XCTestCase {
         let dto = CheckCodeDto(phoneNumber: "+41796580164", email: nil, code: "981673")
 
         // When
-        let result = try await magicAuth.checkCode(checkCodeDto: dto)
+        let result = try await magicAuth?.checkCode(checkCodeDto: dto)
 
         // Then
-        XCTAssertTrue(result, "Should return true for successful verification.")
+        XCTAssertTrue(result!, "Should return true for successful verification.")
     }
 }

@@ -1,13 +1,13 @@
 import XCTest
-@testable import swift_sdk
+@testable import glide_sdk_swift
 
-final class swift_sdkTests: XCTestCase {
+final class glideClient_sdkTests: XCTestCase {
     
     var client: GlideClient!
 
     override func setUpWithError() throws {
         super.setUp()
-        client = GlideClient()
+        client = try GlideClient()
     }
 
     override func tearDownWithError() throws {

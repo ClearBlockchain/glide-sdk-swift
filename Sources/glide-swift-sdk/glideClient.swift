@@ -1,5 +1,4 @@
 import Foundation
-import JWTDecode
 
 protocol AuthConfigProtocol {
     var scopes: [String] { get set }
