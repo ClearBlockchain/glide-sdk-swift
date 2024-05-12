@@ -5,6 +5,8 @@ Pod::Spec.new do |spec|
     spec.description  = "Glide SDK for iOS"
     spec.homepage     = "https://github.com/ClearBlockchain/glide-sdk-swift"
     spec.author             = { "author" => "GlideAPI" }
+    spec.platforms = { :ios => "17.0" }
+    spec.swift_version = "5.10"
     spec.source       = { :git => "https://github.com/ClearBlockchain/glide-sdk-swift", :tag => "#{spec.version}" }
     spec.source_files  = "Sources/glide-sdk-swift/**/*.swift"
     spec.resource_bundles ={ "glide-sdk-swift" => ["Sources/PrivacyInfo.xcprivacy"]}
