@@ -8,8 +8,8 @@ let package = Package(
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "glide-sdk-swift",
-            targets: ["glide-sdk-swift"]),
+            name: "GlideSDKSwift",
+            targets: ["GlideSDKSwift"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-log.git", from: "1.0.0"),
@@ -19,17 +19,16 @@ let package = Package(
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "glide-sdk-swift",
+            name: "GlideSDKSwift",
             dependencies: [
                 .product(name: "Logging", package: "swift-log"),
                 .product(name: "JWTDecode", package: "JWTDecode.swift")
-            ],
-            path: "Sources"
+            ]
         ),
         .testTarget(
-            name: "glide-sdk-swiftTests",
+            name: "GlideSDKSwiftTests",
             dependencies: [
-                "glide-sdk-swift"
+                "GlideSDKSwift"
             ]
         ),
     ]
