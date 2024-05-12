@@ -34,7 +34,7 @@ struct CheckCodeDto: Codable {
     let code: String
 }
 
-@available(macOS 12.0, *)
+@available(iOS 17.0, macOS 14.0, *)
 class MagicAuth {
     private var config: GlideConfig
 

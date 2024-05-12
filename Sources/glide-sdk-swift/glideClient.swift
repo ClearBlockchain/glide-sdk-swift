@@ -82,7 +82,7 @@ func percentEncoded(data: [String: String]) -> Data? {
     .data(using: .utf8)
 }
 
-@available(macOS 12.0, *)
+@available(iOS 17.0, macOS 14.0, *)
 class GlideClient {
     private var config: GlideConfig
     private var session: Session?
@@ -284,8 +284,8 @@ class GlideClient {
                 return AuthenticationResponse(session: self.session, redirectUrl: nil)
             case .threeLeggedOAuth2:
                 return AuthenticationResponse(session: nil, redirectUrl: get3LeggedAuthRedirectUrl(authConfig: mutableAuthConfig))
-            default:
-                throw NSError(domain: "GlideClientError", code: 1008, userInfo: [NSLocalizedDescriptionKey: "Invalid session type"])
+            // default:
+            //     throw NSError(domain: "GlideClientError", code: 1008, userInfo: [NSLocalizedDescriptionKey: "Invalid session type"])
             }
         } catch {
             logger.error("Failed to authenticate, error: \(error)")

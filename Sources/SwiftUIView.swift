@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@available(iOS 11.0, *)
+@available(iOS 17.0, macOS 14.0, *)
 struct SwiftUIView: View {
     var body: some View {
         Text("Glide SDK package for Swift.")
