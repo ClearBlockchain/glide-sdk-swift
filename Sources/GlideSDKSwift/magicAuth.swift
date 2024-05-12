@@ -38,8 +38,14 @@ struct CheckCodeDto: Codable {
 class MagicAuth {
     private var config: GlideConfig
 
-    init() throws {
-        self.config = try getGlideConfig()
+    init(clientId: String?, clientSecret: String?, redirectUri: String?, authBaseUrl: String?, apiBaseUrl: String?) throws {
+        self.config = try getGlideConfig(
+            clientId: clientId,
+            clientSecret: clientSecret,
+            redirectUri: redirectUri,
+            authBaseUrl: authBaseUrl,
+            apiBaseUrl: apiBaseUrl
+        )
     }
 
 

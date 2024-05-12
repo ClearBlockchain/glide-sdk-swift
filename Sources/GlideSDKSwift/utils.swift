@@ -7,21 +7,21 @@ struct GlideConfig {
     let internalUrls: (authBaseUrl: String, apiBaseUrl: String)
 }
 
-func getGlideConfig() throws -> GlideConfig {
-    guard let clientId = ProcessInfo.processInfo.environment["GLIDE_CLIENT_ID"] else {
+func getGlideConfig(clientId: String?, clientSecret: String?, redirectUri: String?, authBaseUrl: String?, apiBaseUrl: String?) throws -> GlideConfig {
+    guard let clientId = clientId ?? ProcessInfo.processInfo.environment["GLIDE_CLIENT_ID"]  else {
         throw NSError(domain: "EnvironmentError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "GLIDE_CLIENT_ID is required"])
     }
 
-    guard let clientSecret = ProcessInfo.processInfo.environment["GLIDE_CLIENT_SECRET"] else {
+    guard let clientSecret = clientSecret ?? ProcessInfo.processInfo.environment["GLIDE_CLIENT_SECRET"] else {
         throw NSError(domain: "EnvironmentError", code: 1002, userInfo: [NSLocalizedDescriptionKey: "GLIDE_CLIENT_SECRET is required"])
     }
 
-    guard let redirectUri = ProcessInfo.processInfo.environment["GLIDE_REDIRECT_URI"] else {
+    guard let redirectUri = redirectUri ?? ProcessInfo.processInfo.environment["GLIDE_REDIRECT_URI"] else {
         throw NSError(domain: "EnvironmentError", code: 1003, userInfo: [NSLocalizedDescriptionKey: "GLIDE_REDIRECT_URI is required"])
     }
 
-    let authBaseUrl = ProcessInfo.processInfo.environment["GLIDE_AUTH_BASE_URL"] ?? "https://oidc.gateway-x.io"
-    let apiBaseUrl = ProcessInfo.processInfo.environment["GLIDE_API_BASE_URL"] ?? "https://api.gateway-x.io"
+    let authBaseUrl = authBaseUrl ?? ProcessInfo.processInfo.environment["GLIDE_AUTH_BASE_URL"] ?? "https://oidc.gateway-x.io"
+    let apiBaseUrl = apiBaseUrl ?? ProcessInfo.processInfo.environment["GLIDE_API_BASE_URL"] ?? "https://api.gateway-x.io"
 
     return GlideConfig(
         clientId: clientId,
